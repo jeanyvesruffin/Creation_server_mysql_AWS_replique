@@ -4,7 +4,8 @@ Creation server mysql sur Amazon Web Service avec replication Master/ Slave
 # Commandes Linux/ Unix
 ![Cheatsheet command line Linux](https://files.fosswire.com/2007/08/fwunixrefshot.png "Cheatsheet command line Linux")
 
-![Architecture client server](/Users/cda/Git/Creation_server_mysql_AWS_replique/architecture client server n thiers.png)
+![Architecture client server](https://user-images.githubusercontent.com/37696862/60921632-3e474700-a29b-11e9-9770-47642e2c8414.png)
+
 
 
 # Creation d'un compte AWS
@@ -45,7 +46,7 @@ https://docs.aws.amazon.com/fr_fr/quickstarts/latest/vmlaunch/step-2-connect-to-
                 $nano /root/.bashrc
                 
   
-![Param bashrc](/Users/cda/Git/Creation_server_mysql_AWS_replique/bashrc.png)
+![Param bashrc](https://user-images.githubusercontent.com/37696862/60921873-cc233200-a29b-11e9-9c33-08909a36d624.png)
 
 
                 
