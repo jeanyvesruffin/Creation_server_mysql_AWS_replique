@@ -177,10 +177,119 @@ https://docs.aws.amazon.com/fr_fr/quickstarts/latest/vmlaunch/step-2-connect-to-
                     CustomLog ${APACHE_LOG_DIR}/DNS-access.log combined
                 
                 </VirtualHost>
-
-
                 
-   
-                    
 
+- Modification du fichier de base de la conf apache 
+
+                $ nano /etc/apache2/apache2.conf
+
+![Param apache](https://user-images.githubusercontent.com/37696862/60924331-3e4a4580-a2a1-11e9-98c8-8f44aad4dda4.png)
+
+                $ a2enmod headers
+                $ a2ensite thesite
+                $ a2dissite default-ssl
+                $ a2dissite 000-default 
+                $ a2dissite 000-default-le-ssl
+                $ service apache2 restart 
+                
+- Installation de mysql en lieu et place de maria
+
+                $ echo -e "deb http://repo.mysql.com/apt/debian/ stretch mysql-5.7\ndeb-src http://repo.mysql.com/apt/debian/ stretch mysql-5.7" > /etc/apt/sources.list.d/mysql.list
+                $ wget -O /tmp/RPM-GPG-KEY-mysql https://repo.mysql.com/RPM-GPG-KEY-mysql
+                $ apt-key add /tmp/RPM-GPG-KEY-mysql
+                $ apt update
+                $ apt install mysql-server
+ 
+- Editer le fichier de configuration mysql pour binder toutes les IF
+   
+                $ nano /etc/mysql/mysql.conf.d/mysqld.cnf
+
+![Param apache2](https://user-images.githubusercontent.com/37696862/60924709-21fad880-a2a2-11e9-88ee-11a2b3215649.png)
+
+- Relancer les services
+
+                $ service mysql restart
+
+- test de mysql en cli
+
+                $ mysql -u root -p
+                
+- Installation de php7
+   
+                $ apt install php
+                
+- Editer le fichier php.ini pour modifier le upload max
+
+                $ nano /etc/php/7.0/apache2/php.ini
+                
+![Param php](https://user-images.githubusercontent.com/37696862/60925069-ef9dab00-a2a2-11e9-8680-737ac9c43b71.png)
+                    
+                $ service apache2 restart
+                
+- Création d’un fichier test dans /home/user/www/
+- nommé test.php avec le compte user
+            
+                $ su user
+                $ nano /home/user/www/test.php 
+                  
+![Param phpinfo](https://user-images.githubusercontent.com/37696862/60925194-44d9bc80-a2a3-11e9-813e-f0c1ee643e8a.png)
+
+                $ exit
+                
+- Lancer un navigateur sur https://votreip/test.php
+
+- Installation des mods php souvent utilisées par les cms
+
+                $ apt install php-curl php-gd php-mcrypt php-zip php-apcu php-xml php-ldap
+                $ service apache2 restart
+  
+- Installation de PMA
+
+                $ apt install phpmyadmin
+                
+- Changer l’alias
+
+![Param phpalias](https://user-images.githubusercontent.com/37696862/60925541-4bb4ff00-a2a4-11e9-9a9a-589b59d83a69.png)
+
+                    $ nano /etc/phpmyadmin/apache.conf
+                    $ service apache2 restart
+                    
+- Configuration des droits pour root dans mysql/pma
+
+![Param root](https://user-images.githubusercontent.com/37696862/60925922-473d1600-a2a5-11e9-979e-dd817945f74d.png)
+
+# Configuration de la replique
+
+Configuration Réplication Master-Slave
+
+https://phelepjeremy.wordpress.com/2018/01/15/replication-de-bases-de-donnees-mysql-maitre-esclave/
+
+# Création script pour ecriture de log
+Script de sauvegarde des bases de données. Le but est de créer une tâche automatique qui compresse en zip le dossier #contenant les bases et qui le sauve dans un dossier à la date du jour
+
+                $ cd /root					
+                $ touch backup.sh
+                $ chmod +x backup.sh 					
+                $ nano backup.sh
+
+===> Fichier nano
+
+                #!/bin/bash
+                #Script de backup auto de la base et du www pour le site user
+                #V1.0 par t.cherrier janvier 2019
+                clear
+                echo Compression :
+                 zip -rq /home/user/$(date +%Y%m%d%H%M)_backup-fichier_www.zip  /home/user/www
+                echo dump de la base
+                mysqldump -u root -pcefim2019 --databases user > /home/user/$(date +%Y-%m-%d-%H.%M.%S).sql
+                echo Terminé
+
+
+- Automatisation du script :
+            
+                $ crontab -e					
+
+- Et ajouter la ligne
+					
+                 */15 * * * * /root/backup.sh
 
