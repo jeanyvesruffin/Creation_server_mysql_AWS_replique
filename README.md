@@ -134,11 +134,12 @@ https://docs.aws.amazon.com/fr_fr/quickstarts/latest/vmlaunch/step-2-connect-to-
                 $ ./certbot-auto
 
 - Configuration apache ultime -> the site.conf, un seul fichier
+> **Remplacer DNS par l'adresse DNS**
 
                 $ nano /etc/apache2/sites-available/thesite.conf
 
                 <VirtualHost *:80>
-                    ServerName tcsql1.cefim-formation.org
+                    ServerName DNS
                     #ServerAlias www.domain.tld
                     RewriteEngine on
                     RewriteCond %{HTTPS} !on
@@ -148,7 +149,7 @@ https://docs.aws.amazon.com/fr_fr/quickstarts/latest/vmlaunch/step-2-connect-to-
                 
                 <VirtualHost *:443>
                 
-                    ServerName tcsql1.cefim-formation.org
+                    ServerName DNS
                     #ServerAlias www.domain.tld
                 
                     DocumentRoot /home/user/www/
@@ -161,9 +162,9 @@ https://docs.aws.amazon.com/fr_fr/quickstarts/latest/vmlaunch/step-2-connect-to-
                     </Directory>
                 
                     SSLEngine on
-                    SSLCertificateFile /etc/letsencrypt/live/tcsql1.cefim-formation.org/cert.pem
-                    SSLCertificateKeyFile /etc/letsencrypt/live/tcsql1.cefim-formation.org/privkey.pem
-                    SSLCertificateChainFile /etc/letsencrypt/live/tcsql1.cefim-formation.org/chain.pem
+                    SSLCertificateFile /etc/letsencrypt/live/DNS/cert.pem
+                    SSLCertificateKeyFile /etc/letsencrypt/live/DNS/privkey.pem
+                    SSLCertificateChainFile /etc/letsencrypt/live/DNS/chain.pem
                     SSLProtocol all -SSLv2 -SSLv3
                     SSLHonorCipherOrder on
                     SSLCompression off
@@ -172,8 +173,8 @@ https://docs.aws.amazon.com/fr_fr/quickstarts/latest/vmlaunch/step-2-connect-to-
                     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
                 
                     LogLevel warn
-                    ErrorLog ${APACHE_LOG_DIR}/tcsql1.cefim-formation.org-error.log
-                    CustomLog ${APACHE_LOG_DIR}/tcsql1.cefim-formation.org-access.log combined
+                    ErrorLog ${APACHE_LOG_DIR}/DNS-error.log
+                    CustomLog ${APACHE_LOG_DIR}/DNS-access.log combined
                 
                 </VirtualHost>
 
