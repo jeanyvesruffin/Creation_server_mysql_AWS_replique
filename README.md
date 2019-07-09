@@ -177,10 +177,59 @@ https://docs.aws.amazon.com/fr_fr/quickstarts/latest/vmlaunch/step-2-connect-to-
                     CustomLog ${APACHE_LOG_DIR}/DNS-access.log combined
                 
                 </VirtualHost>
-
-
                 
+
+- Modification du fichier de base de la conf apache 
+
+                $ nano /etc/apache2/apache2.conf
+
+![Param apache](https://user-images.githubusercontent.com/37696862/60924331-3e4a4580-a2a1-11e9-98c8-8f44aad4dda4.png)
+
+                $ a2enmod headers
+                $ a2ensite thesite
+                $ a2dissite default-ssl
+                $ a2dissite 000-default 
+                $ a2dissite 000-default-le-ssl
+                $ service apache2 restart 
+                
+- Installation de mysql en lieu et place de maria
+
+                $ echo -e "deb http://repo.mysql.com/apt/debian/ stretch mysql-5.7\ndeb-src http://repo.mysql.com/apt/debian/ stretch mysql-5.7" > /etc/apt/sources.list.d/mysql.list
+                $ wget -O /tmp/RPM-GPG-KEY-mysql https://repo.mysql.com/RPM-GPG-KEY-mysql
+                $ apt-key add /tmp/RPM-GPG-KEY-mysql
+                $ apt update
+                $ apt install mysql-server
+ 
+- Editer le fichier de configuration mysql pour binder toutes les IF
    
+                $ nano /etc/mysql/mysql.conf.d/mysqld.cnf
+
+![Param apache2](https://user-images.githubusercontent.com/37696862/60924709-21fad880-a2a2-11e9-88ee-11a2b3215649.png)
+
+- Relancer les services
+
+                $ service mysql restart
+
+- test de mysql en cli
+
+                $ mysql -u root -p
+                
+- Installation de php7
+   
+                $ apt install php
+                
+- Editer le fichier php.ini pour modifier le upload max
+
+                $ nano /etc/php/7.0/apache2/php.ini
+                
+![Param php](https://user-images.githubusercontent.com/37696862/60925069-ef9dab00-a2a2-11e9-8680-737ac9c43b71.png)
                     
-
-
+                $ service apache2 restart
+                
+- Création d’un fichier test dans /home/user/www/
+- nommé test.php avec le compte user
+            
+                $ su user
+                $ nano /home/user/www/test.php 
+                  
+![Param phpinfo](https://user-images.githubusercontent.com/37696862/60925194-44d9bc80-a2a3-11e9-813e-f0c1ee643e8a.png)
